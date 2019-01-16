@@ -13,6 +13,7 @@ package org.junit.platform.commons.util;
 import static org.apiguardian.api.API.Status.INTERNAL;
 
 import java.util.Arrays;
+import java.util.regex.Pattern;
 
 import org.apiguardian.api.API;
 
@@ -30,6 +31,8 @@ import org.apiguardian.api.API;
  */
 @API(status = INTERNAL, since = "1.0")
 public final class StringUtils {
+
+	private static final Pattern ISO_CONTROL_PATTERN = Pattern.compile("(?U)\\p{Cntrl}");
 
 	private StringUtils() {
 		/* no-op */
@@ -180,4 +183,14 @@ public final class StringUtils {
 		}
 	}
 
+	/**
+	 * Replace all ISO control characters in the supplied {@link String}.
+	 *
+	 * @param str the string to check; may be {@code null}
+	 * @param replacement the replacement string
+	 * @return The supplied with all control character replaced.
+	 */
+	public static String replaceIsoControlCharacters(String str, String replacement) {
+		return str == null ? null : ISO_CONTROL_PATTERN.matcher(str).replaceAll(replacement);
+	}
 }

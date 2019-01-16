@@ -14,6 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.platform.commons.util.StringUtils.containsIsoControlCharacter;
 import static org.junit.platform.commons.util.StringUtils.containsWhitespace;
@@ -22,6 +23,7 @@ import static org.junit.platform.commons.util.StringUtils.doesNotContainWhitespa
 import static org.junit.platform.commons.util.StringUtils.isBlank;
 import static org.junit.platform.commons.util.StringUtils.isNotBlank;
 import static org.junit.platform.commons.util.StringUtils.nullSafeToString;
+import static org.junit.platform.commons.util.StringUtils.replaceIsoControlCharacters;
 
 import org.junit.jupiter.api.Test;
 
@@ -88,6 +90,16 @@ class StringUtilsTests {
 			() -> shouldNotContainIsoControlCharacter("hello world")
 		);
 		// @formatter:on
+	}
+
+	@Test
+	void replaceControlCharacters() {
+		assertNull(replaceIsoControlCharacters(null, null));
+		assertEquals("", replaceIsoControlCharacters("", "."));
+		assertEquals("...", replaceIsoControlCharacters("\t\n\r", "."));
+		assertEquals("...", replaceIsoControlCharacters("\u005Ct\u005Cn\u005Cr", "."));
+		assertEquals("abc", replaceIsoControlCharacters("abc", "?"));
+		assertEquals("...", replaceIsoControlCharacters("...", "?"));
 	}
 
 	@Test
